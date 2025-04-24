@@ -1,95 +1,84 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
 
-export default function Home() {
+import React, {JSX, useState} from 'react';
+import styles from './page.module.scss';
+
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+export default function SupportPage(): JSX.Element {
+  const [activeQuestion, setActiveQuestion] = useState<number | null>(null);
+
+  const toggleQuestion = (index: number): void => {
+    setActiveQuestion(activeQuestion === index ? null : index);
+  };
+
+  const faqItems: FAQItem[] = [
+    {
+      question: "Can you create accounts?",
+      answer: "Not at the moment. Currently, the feature set is limited to local storage, and we do not support account creation. However, this feature is on our roadmap for future releases."
+    },
+    {
+      question: "What features are available?",
+      answer: "The most notable features include a simple bell schedule, a calendar of all district events, and a link page where there are easy and quick to access links. This will definitely be expanded in the future, but this is what is available for now."
+    },
+    {
+      question: "What is the purpose of this app?",
+      answer: "The primary and original purpose of this app was to provide a simple and easy way to access bell schedules online without having to go to an official school or district website. This objective has expanded to accommodate for multiple different feature sets."
+    },
+    {
+      question: "How do I get in contact with you?",
+      answer: "You can reach out to me through the contact form on the app or by emailing me at erick.tran@etran.dev",
+    },
+  ];
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+      <div className={styles.container}>
+        <header className={styles.header}>
+          <h1>Support Center</h1>
+          <p>Find answers to common questions or reach out for help</p>
+        </header>
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+        <section className={styles.faqSection}>
+          <h2>Frequently Asked Questions</h2>
+          <div className={styles.faqList}>
+            {faqItems.map((item, index) => (
+                <div
+                    key={index}
+                    className={`${styles.faqItem} ${activeQuestion === index ? styles.active : ''}`}
+                >
+                  <button
+                      className={styles.questionBtn}
+                      onClick={() => toggleQuestion(index)}
+                      aria-expanded={activeQuestion === index}
+                  >
+                    {item.question}
+                    <span className={styles.icon}>{activeQuestion === index ? '−' : '+'}</span>
+                  </button>
+                  <div className={styles.answerWrapper}>
+                    <div className={styles.answer}>
+                      <p>{item.answer}</p>
+                    </div>
+                  </div>
+                </div>
+            ))}
+          </div>
+        </section>
+
+        <section className={styles.formSection}>
+          <h2>Still Need Help?</h2>
+          <p>Submit a request and our support team will get back to you shortly.</p>
+          <div className={styles.formContainer}>
+            <iframe src="https://forms.gle/8dkHZvCLyNFYdogW8" name="myiFrame"
+                    height="800px" width="1000px"
+                    allowFullScreen>
+            Loading form...
+          </iframe>
+      </div>
+</section>
+</div>
+)
+  ;
 }
